@@ -197,11 +197,6 @@
         width: calc(100vw - 20px);
     }
 
-    .side-panel-wrapper {
-        outline: 5px solid red !important;
-    }
-
-
     .side-panel {
         max-height: 64dvh;
     overflow-y: auto;
@@ -232,7 +227,6 @@
 
         width: calc(100vw - 10px);
 
-        transform: translateY(-50%);
     }
 
     .side-panel {
