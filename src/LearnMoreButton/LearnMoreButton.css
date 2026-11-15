@@ -1,0 +1,216 @@
+
+/* =====================================
+   LEARN MORE BUTTON
+===================================== */
+
+button.learn-more {
+    position: absolute;
+    bottom: 17%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+
+    padding: 0;
+
+    font-size: 16px;
+    font-family: inherit;
+
+    width: 12rem;
+    height: 3rem;
+
+    z-index: 20;
+}
+
+/* =====================================
+   CIRCLE
+===================================== */
+
+button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+
+    position: relative;
+    display: block;
+
+    margin: 0;
+
+    width: 3rem;
+    height: 3rem;
+
+    background: transparent;
+    border: 2px solid white;
+
+    border-radius: 1.625rem;
+}
+
+/* =====================================
+   ICON
+===================================== */
+
+button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    margin: auto;
+    background: #fff;
+}
+
+/* =====================================
+   ARROW
+===================================== */
+
+button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+
+    left: 0.625rem;
+
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+}
+
+/* =====================================
+   ARROWHEAD
+===================================== */
+
+button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+
+    top: -0.29rem;
+    right: 0.0625rem;
+
+    width: 0.625rem;
+    height: 0.625rem;
+
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+
+    transform: rotate(45deg);
+
+    transition: border-color 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+}
+
+/* =====================================
+   BUTTON TEXT
+===================================== */
+
+button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+
+    color: #f5f4f3;
+
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* =====================================
+   HOVER ANIMATION
+===================================== */
+
+button.learn-more:hover .circle {
+    width: 100%;
+    background-color: white;
+}
+
+/* Arrow line becomes black */
+button.learn-more:hover .circle .icon.arrow {
+    background: #0b0b0b;
+    transform: translate(1rem, 0);
+}
+
+/* Arrowhead becomes black */
+button.learn-more:hover .circle .icon.arrow::before {
+    border-top-color: #0b0b0b;
+    border-right-color: #0b0b0b;
+}
+
+/* Button text becomes black */
+button.learn-more:hover .button-text {
+    color: #0b0b0b;
+}
+
+/* =====================================
+   ACTIVE
+===================================== */
+
+button.learn-more:active .circle {
+    transform: scale(0.97);
+}
+
+/* =====================================
+   ACCESSIBILITY
+===================================== */
+
+button.learn-more:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+}
+
+
+@media screen and (max-height: 484px) and (orientation: landscape) {
+    button.learn-more {
+        width: 12rem;
+        height: 2.5rem;
+        padding: 0;
+        box-sizing: border-box;
+        font-size: 14px;
+        bottom: 6%;
+        z-index: 20;
+    }
+
+    button.learn-more .circle {
+        position: absolute;
+        top: 50%;
+        left: 0;
+
+        width: 2rem;
+        height: 2rem;
+
+        transform: translateY(-50%);
+    }
+
+    button.learn-more .circle .icon.arrow {
+        left: 0.425rem;
+
+        width: 0.9rem;
+        height: 0.125rem;
+    }
+
+    button.learn-more .button-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 0 0 0 1.5rem;
+        padding: 0;
+
+        line-height: 1;
+    }
+
+    button.learn-more:active .circle {
+        transform:
+            translateY(-50%)
+            scale(0.97);
+    }
+}

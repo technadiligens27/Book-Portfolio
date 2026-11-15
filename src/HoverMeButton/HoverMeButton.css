@@ -1,0 +1,222 @@
+
+.button-01 {
+    cursor: pointer;
+
+    width: 55px;
+    height: 55px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+    color: rgb(255, 255, 255);
+
+    border: 3px solid rgb(250, 250, 250);
+    border-radius: 12px;
+
+    background-color: transparent;
+    font-weight: 600;
+
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+
+    overflow: hidden;
+    isolation: isolate;
+
+    position: absolute;
+    left: 78%;
+    top: 70%;
+
+    box-shadow: 0px 6px 23.4px 5px rgba(0, 0, 0, 0.35);
+
+    transform: translateX(-50%);
+}
+
+/* =====================================
+   BUTTON HOVER BACKGROUND
+===================================== */
+
+.button-01::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: inherit;
+    scale: 0;
+    z-index: -1;
+
+    background-color: rgb(249, 248, 247);
+
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+}
+
+.button-01:hover:not(:disabled)::before {
+    scale: 3;
+}
+
+.button-01:hover:not(:disabled) {
+    color: #000000;
+    scale: 1.1;
+
+    box-shadow: 0 0px 20px rgba(193, 163, 98, 0.4);
+}
+
+.button-01:active:not(:disabled) {
+    scale: 1;
+}
+
+/* =====================================
+   PREVIOUS PAGE BUTTON
+===================================== */
+
+.button-02 {
+    left: 18%;
+    top: 40%;
+}
+
+/* =====================================
+   OTHER BUTTONS
+===================================== */
+
+.button-03 {
+    left: 10%;
+    font-size: 16px;
+}
+
+.learn-more-btn {
+    left: 90%;
+    width: 200px;
+    font-size: 16px;
+}
+
+/* =====================================
+   DISABLED BUTTONS
+===================================== */
+
+.button-01:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+
+@media screen and (max-width: 1024px) {
+
+    .button-01 {
+        width: 48px;
+        height: 48px;
+
+        font-size: 22px;
+
+        border-width: 2px;
+        border-radius: 8px;
+
+        box-shadow: 0px 4px 14px 2px rgba(0, 0, 0, 0.3);
+    }
+
+}
+
+
+
+/* =====================================
+   RESPONSIVE - 784px AND BELOW
+===================================== */
+
+@media screen and (max-width: 784px) {
+
+    .button-01 {
+        width: 48px;
+        height: 48px;
+
+        font-size: 22px;
+
+        border-width: 2px;
+        border-radius: 8px;
+
+        box-shadow: 0px 4px 14px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* HOVER BACKGROUND */
+    .button-01::before {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* PREVIOUS BUTTON */
+    .button-02 {
+        /* Keep existing position */
+    }
+
+    /* OTHER BUTTONS */
+    .button-03 {
+        font-size: 13px;
+    }
+
+    .learn-more-btn {
+        width: 160px;
+        font-size: 13px;
+    }
+}
+
+
+@media screen and (max-width: 484px) {
+
+    .button-01 {
+        width: 35px;
+        height: 35px;
+        font-size: 22px;
+        border-width: 2px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 14px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* HOVER BACKGROUND */
+    .button-01::before {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* PREVIOUS BUTTON */
+    .button-02 {
+        /* Keep existing position */
+    }
+
+    /* OTHER BUTTONS */
+    .button-03 {
+        font-size: 13px;
+    }
+
+    .learn-more-btn {
+        width: 160px;
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-height: 484px) and (orientation: landscape) {
+    .button-01 {
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+        border-width: 2px;
+        border-radius: 8px;
+        box-shadow: 0 4px 14px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .button-01::before {
+        width: 38px;
+        height: 38px;
+    }
+
+    .button-03 {
+        font-size: 13px;
+    }
+
+    .learn-more-btn {
+        width: 150px;
+        font-size: 13px;
+    }
+}
