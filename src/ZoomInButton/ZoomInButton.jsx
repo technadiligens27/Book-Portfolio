@@ -20,20 +20,8 @@ const getScreenType = () => {
   const width =
     window.innerWidth
 
-  const height =
-    window.innerHeight
-
-  const isLandscape =
-    width > height
-
-  const mobileDevice =
-    Math.min(width, height) <= 484
-
-  if (
-    mobileDevice &&
-    isLandscape
-  ) {
-    return "mobileLandscape"
+  if (width <= 483) {
+    return "mobile"
   }
 
   if (width <= 600) {
@@ -52,11 +40,7 @@ const getScreenType = () => {
 }
 
 const ZoomInButton = ({
-  // ==========================================
-  // DESKTOP ZOOM VALUES
   // Above 1024px
-  // ==========================================
-
   zoomPosition = [
     -2.5,
     -1.5,
@@ -71,11 +55,7 @@ const ZoomInButton = ({
 
   zoomScale = 1.3,
 
-  // ==========================================
-  // TABLET ZOOM VALUES
-  // 785px TO 1024px
-  // ==========================================
-
+  // 785px to 1024px
   tabletZoomPosition = [
     -2.5,
     -1.5,
@@ -90,11 +70,7 @@ const ZoomInButton = ({
 
   tabletZoomScale = 1.15,
 
-  // ==========================================
-  // SMALL TABLET ZOOM VALUES
-  // 601px TO 784px
-  // ==========================================
-
+  // 601px to 784px
   smallTabletZoomPosition = [
     -3.5,
     -1.5,
@@ -109,11 +85,7 @@ const ZoomInButton = ({
 
   smallTabletZoomScale = 1.35,
 
-  // ==========================================
-  // LARGE MOBILE ZOOM VALUES
-  // Mobile portrait
-  // ==========================================
-
+  // 484px to 600px
   largeMobileZoomPosition = [
     -4.5,
     -1.5,
@@ -128,28 +100,20 @@ const ZoomInButton = ({
 
   largeMobileZoomScale = 1.38,
 
-  // ==========================================
-  // MOBILE LANDSCAPE ZOOM VALUES
-  // Phone is turned sideways
-  // ==========================================
-
-  mobileLandscapeZoomPosition = [
-    -2.5,
+  // 483px and below
+  mobileZoomPosition = [
+    -5.5,
     -2.5,
     -3,
   ],
 
-  mobileLandscapeZoomRotation = [
+  mobileZoomRotation = [
     Math.PI / 3,
     Math.PI / 8,
     -Math.PI / 7,
   ],
 
-  mobileLandscapeZoomScale = 1.8,
-
-  // ==========================================
-  // ANIMATION
-  // ==========================================
+  mobileZoomScale = 1.28,
 
   zoomDuration = 1.5,
 }) => {
@@ -182,8 +146,8 @@ const ZoomInButton = ({
   const zoomTimeline =
     useRef(null)
 
-  const isMobileLandscape =
-    screenType === "mobileLandscape"
+  const isMobile =
+    screenType === "mobile"
 
   const isLargeMobile =
     screenType === "largeMobile"
@@ -208,19 +172,9 @@ const ZoomInButton = ({
       checkScreenSize
     )
 
-    window.addEventListener(
-      "orientationchange",
-      checkScreenSize
-    )
-
     return () => {
       window.removeEventListener(
         "resize",
-        checkScreenSize
-      )
-
-      window.removeEventListener(
-        "orientationchange",
         checkScreenSize
       )
     }
@@ -233,8 +187,8 @@ const ZoomInButton = ({
   }, [])
 
   const finalZoomPosition =
-    isMobileLandscape
-      ? mobileLandscapeZoomPosition
+    isMobile
+      ? mobileZoomPosition
       : isLargeMobile
         ? largeMobileZoomPosition
         : isSmallTablet
@@ -244,8 +198,8 @@ const ZoomInButton = ({
             : zoomPosition
 
   const finalZoomRotation =
-    isMobileLandscape
-      ? mobileLandscapeZoomRotation
+    isMobile
+      ? mobileZoomRotation
       : isLargeMobile
         ? largeMobileZoomRotation
         : isSmallTablet
@@ -255,8 +209,8 @@ const ZoomInButton = ({
             : zoomRotation
 
   const finalZoomScale =
-    isMobileLandscape
-      ? mobileLandscapeZoomScale
+    isMobile
+      ? mobileZoomScale
       : isLargeMobile
         ? largeMobileZoomScale
         : isSmallTablet

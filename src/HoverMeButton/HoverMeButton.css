@@ -163,11 +163,50 @@
 }
 
 
+@media screen and (max-width: 600px) {
+
+    .button-01 {
+        width: 42px;
+        height: 42px;
+
+        font-size: 20px;
+
+        border-width: 2px;
+        border-radius: 8px;
+
+        box-shadow: 0px 4px 14px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* HOVER BACKGROUND */
+    .button-01::before {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* PREVIOUS BUTTON */
+    .button-02 {
+        /* Keep existing position */
+    }
+
+    /* OTHER BUTTONS */
+    .button-03 {
+        font-size: 13px;
+    }
+
+    .learn-more-btn {
+        width: 160px;
+        font-size: 13px;
+    }
+}
+
+
+
+
 @media screen and (max-width: 484px) {
 
     .button-01 {
-        width: 35px;
-        height: 35px;
+        width: 38px;
+        height: 38px;
         font-size: 22px;
         border-width: 2px;
         border-radius: 8px;
@@ -196,27 +235,12 @@
     }
 }
 
-@media screen and (max-height: 484px) and (orientation: landscape) {
+@media screen and (max-width: 425px) {
     .button-01 {
-        width: 34px;
-        height: 34px;
-        font-size: 20px;
-        border-width: 2px;
-        border-radius: 8px;
-        box-shadow: 0 4px 14px 2px rgba(0, 0, 0, 0.3);
+        width: 35px;
+        height: 35px;
+        font-size: 22px;
     }
 
-    .button-01::before {
-        width: 38px;
-        height: 38px;
-    }
-
-    .button-03 {
-        font-size: 13px;
-    }
-
-    .learn-more-btn {
-        width: 150px;
-        font-size: 13px;
-    }
 }
+

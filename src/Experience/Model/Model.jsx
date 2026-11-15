@@ -44,20 +44,8 @@ const getScreenType = () => {
   const width =
     window.innerWidth
 
-  const height =
-    window.innerHeight
-
-  const isLandscape =
-    width > height
-
-  const mobileDevice =
-    Math.min(width, height) <= 484
-
-  if (
-    mobileDevice &&
-    isLandscape
-  ) {
-    return "mobileLandscape"
+  if (width <= 483) {
+    return "mobile"
   }
 
   if (width <= 600) {
@@ -126,8 +114,7 @@ const Model = ({
 
   smallTabletScale = 0.6,
 
-  // Mobile portrait
-  // 600px and below
+  // 484px to 600px
   largeMobilePosition = [
     -0.39,
     0,
@@ -142,21 +129,20 @@ const Model = ({
 
   largeMobileScale = 0.6,
 
-  // Mobile landscape
-  // Shortest screen side is 484px or below
-  mobileLandscapePosition = [
+  // 483px and below
+  mobilePosition = [
     -0.39,
-    0.5,
+    0,
     -0.26,
   ],
 
-  mobileLandscapeRotation = [
+  mobileRotation = [
     0.77,
     0.44,
     -0.39,
   ],
 
-  mobileLandscapeScale = 1,
+  mobileScale = 0.45,
 }) => {
   const {
     modelRef,
@@ -203,19 +189,9 @@ const Model = ({
       checkScreenSize
     )
 
-    window.addEventListener(
-      "orientationchange",
-      checkScreenSize
-    )
-
     return () => {
       window.removeEventListener(
         "resize",
-        checkScreenSize
-      )
-
-      window.removeEventListener(
-        "orientationchange",
         checkScreenSize
       )
     }
@@ -438,8 +414,8 @@ const Model = ({
   ])
 
   const responsivePosition =
-    screenType === "mobileLandscape"
-      ? mobileLandscapePosition
+    screenType === "mobile"
+      ? mobilePosition
       : screenType === "largeMobile"
         ? largeMobilePosition
         : screenType === "smallTablet"
@@ -449,8 +425,8 @@ const Model = ({
             : desktopPosition
 
   const responsiveRotation =
-    screenType === "mobileLandscape"
-      ? mobileLandscapeRotation
+    screenType === "mobile"
+      ? mobileRotation
       : screenType === "largeMobile"
         ? largeMobileRotation
         : screenType === "smallTablet"
@@ -460,8 +436,8 @@ const Model = ({
             : desktopRotation
 
   const responsiveScale =
-    screenType === "mobileLandscape"
-      ? mobileLandscapeScale
+    screenType === "mobile"
+      ? mobileScale
       : screenType === "largeMobile"
         ? largeMobileScale
         : screenType === "smallTablet"

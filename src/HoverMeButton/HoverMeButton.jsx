@@ -144,27 +144,6 @@ const HoverMeButton = ({
   largeMobileZoomPreviousTop = "85%",
 
   // ==========================================
-  // MOBILE LANDSCAPE ORIGINAL POSITIONS
-  // Phone turned sideways
-  // ==========================================
-
-  mobileLandscapeNextLeft = "93%",
-  mobileLandscapeNextTop = "40%",
-
-  mobileLandscapePreviousLeft = "5%",
-  mobileLandscapePreviousTop = "40%",
-
-  // ==========================================
-  // MOBILE LANDSCAPE ZOOM POSITIONS
-  // ==========================================
-
-  mobileLandscapeZoomNextLeft = "91%",
-  mobileLandscapeZoomNextTop = "45%",
-
-  mobileLandscapeZoomPreviousLeft = "8%",
-  mobileLandscapeZoomPreviousTop = "45%",
-
-  // ==========================================
   // ANIMATION CONTROLS
   // ==========================================
 
@@ -252,9 +231,7 @@ const HoverMeButton = ({
   }, [])
 
   const normalNextLeft =
-    isMobileLandscape
-      ? mobileLandscapeNextLeft
-      : isLargeMobile
+    isLargeMobile
         ? largeMobileNextLeft
         : isSmallTablet
           ? smallTabletNextLeft
@@ -263,9 +240,7 @@ const HoverMeButton = ({
             : originalNextLeft
 
   const normalNextTop =
-    isMobileLandscape
-      ? mobileLandscapeNextTop
-      : isLargeMobile
+    isLargeMobile
         ? largeMobileNextTop
         : isSmallTablet
           ? smallTabletNextTop
@@ -274,9 +249,7 @@ const HoverMeButton = ({
             : originalNextTop
 
   const normalPreviousLeft =
-    isMobileLandscape
-      ? mobileLandscapePreviousLeft
-      : isLargeMobile
+    isLargeMobile
         ? largeMobilePreviousLeft
         : isSmallTablet
           ? smallTabletPreviousLeft
@@ -285,9 +258,7 @@ const HoverMeButton = ({
             : originalPreviousLeft
 
   const normalPreviousTop =
-    isMobileLandscape
-      ? mobileLandscapePreviousTop
-      : isLargeMobile
+    isLargeMobile
         ? largeMobilePreviousTop
         : isSmallTablet
           ? smallTabletPreviousTop
@@ -320,9 +291,7 @@ const HoverMeButton = ({
 
     if (isZoomedIn) {
       nextTargetLeft =
-        isMobileLandscape
-          ? mobileLandscapeZoomNextLeft
-          : isLargeMobile
+         isLargeMobile
             ? largeMobileZoomNextLeft
             : isSmallTablet
               ? smallTabletZoomNextLeft
@@ -331,9 +300,7 @@ const HoverMeButton = ({
                 : zoomNextLeft
 
       nextTargetTop =
-        isMobileLandscape
-          ? mobileLandscapeZoomNextTop
-          : isLargeMobile
+        isLargeMobile
             ? largeMobileZoomNextTop
             : isSmallTablet
               ? smallTabletZoomNextTop
@@ -342,9 +309,7 @@ const HoverMeButton = ({
                 : zoomNextTop
 
       previousTargetLeft =
-        isMobileLandscape
-          ? mobileLandscapeZoomPreviousLeft
-          : isLargeMobile
+        isLargeMobile
             ? largeMobileZoomPreviousLeft
             : isSmallTablet
               ? smallTabletZoomPreviousLeft
@@ -353,9 +318,7 @@ const HoverMeButton = ({
                 : zoomPreviousLeft
 
       previousTargetTop =
-        isMobileLandscape
-          ? mobileLandscapeZoomPreviousTop
-          : isLargeMobile
+        isLargeMobile
             ? largeMobileZoomPreviousTop
             : isSmallTablet
               ? smallTabletZoomPreviousTop
@@ -457,12 +420,6 @@ const HoverMeButton = ({
 
     largeMobileZoomPreviousLeft,
     largeMobileZoomPreviousTop,
-
-    mobileLandscapeZoomNextLeft,
-    mobileLandscapeZoomNextTop,
-
-    mobileLandscapeZoomPreviousLeft,
-    mobileLandscapeZoomPreviousTop,
 
     moveDuration,
     nextMoveDuration,

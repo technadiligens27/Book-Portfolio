@@ -6,6 +6,16 @@
     top: 103%;
 }
 
+@media screen and (max-width: 600px) {
+    .home-button{
+        position: absolute;
+        width: 120px;
+        font-size: 14px;
+        left: 35%;
+        top: 103%;
+        height: 44px;
+    }
+}
 
 @media (max-width: 484px) {
     .home-button{
@@ -14,17 +24,14 @@
         font-size: 12px;
         left: 35%;
         top: 103%;
-        height: 34px;
+        height: 38px;
     }
 }
 
-@media screen and (max-height: 484px) and (orientation: landscape) {
-    .home-button {
-        width: 100px;
-height: 34px;
-        font-size: 12px;
-
-        left: 32%;
-        top: 103%;
-    }
+@media (max-width: 425px) {
+  .home-button{
+    height: 34px;
+    left: 50%;
+  } 
 }
+

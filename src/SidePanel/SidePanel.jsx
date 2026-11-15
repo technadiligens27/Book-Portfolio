@@ -87,20 +87,8 @@ const getScreenType = () => {
   const width =
     window.innerWidth
 
-  const height =
-    window.innerHeight
-
-  const isLandscape =
-    width > height
-
-  const mobileDevice =
-    Math.min(width, height) <= 484
-
-  if (
-    mobileDevice &&
-    isLandscape
-  ) {
-    return "mobileLandscape"
+  if (width <= 483) {
+    return "mobile"
   }
 
   if (width <= 600) {
@@ -121,7 +109,7 @@ const getScreenType = () => {
 const SidePanel = ({
   children,
 
-  // Desktop: above 1024px
+  // Above 1024px
   modelPosition = [
     2.7,
     0,
@@ -136,7 +124,7 @@ const SidePanel = ({
 
   modelScale = 0.8,
 
-  // Tablet: 785px to 1024px
+  // 785px to 1024px
   tabletModelPosition = [
     1.5,
     0,
@@ -151,7 +139,7 @@ const SidePanel = ({
 
   tabletModelScale = 0.7,
 
-  // Small tablet: 601px to 784px
+  // 601px to 784px
   smallTabletModelPosition = [
     1.4,
     0.5,
@@ -166,7 +154,7 @@ const SidePanel = ({
 
   smallTabletModelScale = 0.55,
 
-  // Mobile portrait
+  // 484px to 600px
   largeMobileModelPosition = [
     -1.7,
     1.7,
@@ -181,20 +169,20 @@ const SidePanel = ({
 
   largeMobileModelScale = 0.6,
 
-  // Mobile landscape
-  mobileLandscapeModelPosition = [
-    2.4,
-    1,
-    -1,
+  // 483px and below
+  mobileModelPosition = [
+    -2,
+    1.7,
+    -2,
   ],
 
-  mobileLandscapeModelRotation = [
+  mobileModelRotation = [
     0.77,
-    0,
-    0.19,
+    Math.PI / 10,
+    -0.29,
   ],
 
-  mobileLandscapeModelScale = 0.75,
+  mobileModelScale = 0.55,
 
   animationDuration = 1.5,
   contentFadeInDuration = 0.8,
@@ -242,8 +230,8 @@ const SidePanel = ({
       displayedPage
     ] || []
 
-  const isMobileLandscape =
-    screenType === "mobileLandscape"
+  const isMobile =
+    screenType === "mobile"
 
   const isLargeMobile =
     screenType === "largeMobile"
@@ -268,27 +256,17 @@ const SidePanel = ({
       checkScreenSize
     )
 
-    window.addEventListener(
-      "orientationchange",
-      checkScreenSize
-    )
-
     return () => {
       window.removeEventListener(
         "resize",
-        checkScreenSize
-      )
-
-      window.removeEventListener(
-        "orientationchange",
         checkScreenSize
       )
     }
   }, [])
 
   const finalModelPosition =
-    isMobileLandscape
-      ? mobileLandscapeModelPosition
+    isMobile
+      ? mobileModelPosition
       : isLargeMobile
         ? largeMobileModelPosition
         : isSmallTablet
@@ -298,8 +276,8 @@ const SidePanel = ({
             : modelPosition
 
   const finalModelRotation =
-    isMobileLandscape
-      ? mobileLandscapeModelRotation
+    isMobile
+      ? mobileModelRotation
       : isLargeMobile
         ? largeMobileModelRotation
         : isSmallTablet
@@ -309,8 +287,8 @@ const SidePanel = ({
             : modelRotation
 
   const finalModelScale =
-    isMobileLandscape
-      ? mobileLandscapeModelScale
+    isMobile
+      ? mobileModelScale
       : isLargeMobile
         ? largeMobileModelScale
         : isSmallTablet

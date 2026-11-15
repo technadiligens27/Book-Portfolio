@@ -168,14 +168,14 @@ button.learn-more:focus-visible {
 }
 
 
-@media screen and (max-height: 484px) and (orientation: landscape) {
+@media screen and (max-width: 484px) {
     button.learn-more {
-        width: 12rem;
+        width: 9rem;
         height: 2.5rem;
         padding: 0;
         box-sizing: border-box;
         font-size: 14px;
-        bottom: 6%;
+        bottom: 18.5%;
         z-index: 20;
     }
 
@@ -191,7 +191,7 @@ button.learn-more:focus-visible {
     }
 
     button.learn-more .circle .icon.arrow {
-        left: 0.425rem;
+        left: 0.245rem;
 
         width: 0.9rem;
         height: 0.125rem;
