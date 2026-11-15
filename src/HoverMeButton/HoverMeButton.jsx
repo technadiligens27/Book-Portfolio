@@ -74,11 +74,11 @@ const HoverMeButton = ({
   // DESKTOP ZOOM POSITIONS
   // ==========================================
 
-  zoomNextLeft = "70%",
-  zoomNextTop = "65%",
+  zoomNextLeft = "85%",
+  zoomNextTop = "45%",
 
-  zoomPreviousLeft = "10%",
-  zoomPreviousTop = "65%",
+  zoomPreviousLeft = "13%",
+  zoomPreviousTop = "45%",
 
   // ==========================================
   // TABLET ORIGINAL POSITIONS

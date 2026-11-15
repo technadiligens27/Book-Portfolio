@@ -46,7 +46,8 @@ const MainLight = () => {
 // =====================================
 
 const Experience = () => {
-
+const backgroundImage =
+  `${import.meta.env.BASE_URL}bg02.png`
   const modelRef = useRef(null);
 
   const {isZoomedIn} = useAnimationContext()
@@ -59,7 +60,13 @@ const Experience = () => {
   const environmentIntensity = 1.86;
 
   return (
-    <div className="experience-container">
+    <div 
+      style={{
+        backgroundImage:
+          `url(${backgroundImage})`,
+      }}
+    className="experience-container">
+      
       <Canvas
         camera={{
           position: [5, 4, 7],
