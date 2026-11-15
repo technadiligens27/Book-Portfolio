@@ -146,11 +146,6 @@
         height: 35px;
     }
 
-    /* PREVIOUS BUTTON */
-    .button-02 {
-        /* Keep existing position */
-    }
-
     /* OTHER BUTTONS */
     .button-03 {
         font-size: 13px;
@@ -183,10 +178,7 @@
         height: 35px;
     }
 
-    /* PREVIOUS BUTTON */
-    .button-02 {
-        /* Keep existing position */
-    }
+
 
     /* OTHER BUTTONS */
     .button-03 {
@@ -217,11 +209,6 @@
     .button-01::before {
         width: 35px;
         height: 35px;
-    }
-
-    /* PREVIOUS BUTTON */
-    .button-02 {
-        /* Keep existing position */
     }
 
     /* OTHER BUTTONS */
