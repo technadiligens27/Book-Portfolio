@@ -16,31 +16,48 @@ import {
 
 import "./ZoomInButton.css"
 
+// ==========================================
+// RESPONSIVE SCREEN TYPE DETECTION
+// ==========================================
+
 const getScreenType = () => {
   const width =
     window.innerWidth
 
+  // Mobile: 483px and below
   if (width <= 483) {
     return "mobile"
   }
 
+  // Large mobile: 484px to 600px
   if (width <= 600) {
     return "largeMobile"
   }
 
+  // Small tablet: 601px to 784px
   if (width <= 784) {
     return "smallTablet"
   }
 
+  // Tablet: 785px to 1024px
   if (width <= 1024) {
     return "tablet"
   }
 
+  // Desktop: above 1024px
   return "desktop"
 }
 
+// ==========================================
+// ZOOM IN BUTTON
+// ==========================================
+
 const ZoomInButton = ({
+  // ==========================================
+  // DESKTOP ZOOM VALUES
   // Above 1024px
+  // ==========================================
+
   zoomPosition = [
     -2.5,
     -1.5,
@@ -55,7 +72,11 @@ const ZoomInButton = ({
 
   zoomScale = 1.3,
 
+  // ==========================================
+  // TABLET ZOOM VALUES
   // 785px to 1024px
+  // ==========================================
+
   tabletZoomPosition = [
     -2.5,
     -1.5,
@@ -70,7 +91,11 @@ const ZoomInButton = ({
 
   tabletZoomScale = 1.15,
 
+  // ==========================================
+  // SMALL TABLET ZOOM VALUES
   // 601px to 784px
+  // ==========================================
+
   smallTabletZoomPosition = [
     -3.5,
     -1.5,
@@ -85,7 +110,11 @@ const ZoomInButton = ({
 
   smallTabletZoomScale = 1.35,
 
+  // ==========================================
+  // LARGE MOBILE ZOOM VALUES
   // 484px to 600px
+  // ==========================================
+
   largeMobileZoomPosition = [
     -4.5,
     -1.5,
@@ -100,7 +129,11 @@ const ZoomInButton = ({
 
   largeMobileZoomScale = 1.38,
 
+  // ==========================================
+  // MOBILE ZOOM VALUES
   // 483px and below
+  // ==========================================
+
   mobileZoomPosition = [
     -5.5,
     -2.5,
@@ -115,16 +148,32 @@ const ZoomInButton = ({
 
   mobileZoomScale = 1.28,
 
+  // ==========================================
+  // GSAP ANIMATION DURATION
+  // ==========================================
+
   zoomDuration = 1.5,
 }) => {
+  // ==========================================
+  // BOOK MODEL REFERENCE
+  // ==========================================
+
   const {
     modelRef,
   } = useModelContext()
+
+  // ==========================================
+  // ZOOM STATE
+  // ==========================================
 
   const {
     isZoomedIn,
     setIsZoomedIn,
   } = useAnimationContext()
+
+  // ==========================================
+  // CURRENT RESPONSIVE SCREEN TYPE
+  // ==========================================
 
   const [
     screenType,
@@ -137,14 +186,32 @@ const ZoomInButton = ({
     return getScreenType()
   })
 
+  // ==========================================
+  // ORIGINAL MODEL TRANSFORMS
+  // Saved before zooming so Zoom Out can restore
+  // the exact original position, rotation, and scale.
+  // ==========================================
+
   const originalTransforms =
     useRef(null)
+
+  // ==========================================
+  // PREVENTS DOUBLE CLICKING DURING ANIMATION
+  // ==========================================
 
   const isZoomAnimating =
     useRef(false)
 
+  // ==========================================
+  // GSAP TIMELINE REFERENCE
+  // ==========================================
+
   const zoomTimeline =
     useRef(null)
+
+  // ==========================================
+  // SCREEN TYPE HELPERS
+  // ==========================================
 
   const isMobile =
     screenType === "mobile"
@@ -157,6 +224,10 @@ const ZoomInButton = ({
 
   const isTablet =
     screenType === "tablet"
+
+  // ==========================================
+  // UPDATE SCREEN TYPE WHEN WINDOW RESIZES
+  // ==========================================
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -180,11 +251,19 @@ const ZoomInButton = ({
     }
   }, [])
 
+  // ==========================================
+  // CLEAN UP ACTIVE GSAP TIMELINE
+  // ==========================================
+
   useEffect(() => {
     return () => {
       zoomTimeline.current?.kill()
     }
   }, [])
+
+  // ==========================================
+  // SELECT RESPONSIVE ZOOM POSITION
+  // ==========================================
 
   const finalZoomPosition =
     isMobile
@@ -197,6 +276,10 @@ const ZoomInButton = ({
             ? tabletZoomPosition
             : zoomPosition
 
+  // ==========================================
+  // SELECT RESPONSIVE ZOOM ROTATION
+  // ==========================================
+
   const finalZoomRotation =
     isMobile
       ? mobileZoomRotation
@@ -207,6 +290,10 @@ const ZoomInButton = ({
           : isTablet
             ? tabletZoomRotation
             : zoomRotation
+
+  // ==========================================
+  // SELECT RESPONSIVE ZOOM SCALE
+  // ==========================================
 
   const finalZoomScale =
     isMobile
@@ -219,10 +306,16 @@ const ZoomInButton = ({
             ? tabletZoomScale
             : zoomScale
 
+  // ==========================================
+  // ZOOM INTO THE BOOK
+  // ==========================================
+
   const zoomIn = () => {
     const model =
       modelRef.current
 
+    // Do nothing if model is unavailable
+    // or a zoom animation is already running
     if (
       !model ||
       isZoomAnimating.current
@@ -230,6 +323,7 @@ const ZoomInButton = ({
       return
     }
 
+    // Store book's current transform once
     if (!originalTransforms.current) {
       originalTransforms.current = {
         position:
@@ -245,8 +339,10 @@ const ZoomInButton = ({
 
     isZoomAnimating.current = true
 
+    // Updates button icon and other UI elements
     setIsZoomedIn(true)
 
+    // Create a new GSAP timeline
     zoomTimeline.current =
       gsap.timeline({
         onComplete: () => {
@@ -255,6 +351,7 @@ const ZoomInButton = ({
         },
       })
 
+    // Animate book position
     zoomTimeline.current.to(
       model.position,
       {
@@ -271,6 +368,7 @@ const ZoomInButton = ({
       0
     )
 
+    // Animate book rotation
     zoomTimeline.current.to(
       model.rotation,
       {
@@ -287,6 +385,7 @@ const ZoomInButton = ({
       0
     )
 
+    // Animate book scale equally on every axis
     zoomTimeline.current.to(
       model.scale,
       {
@@ -304,6 +403,10 @@ const ZoomInButton = ({
     )
   }
 
+  // ==========================================
+  // RESTORE ORIGINAL BOOK TRANSFORM
+  // ==========================================
+
   const zoomOut = () => {
     const model =
       modelRef.current
@@ -311,6 +414,8 @@ const ZoomInButton = ({
     const original =
       originalTransforms.current
 
+    // Do nothing if original transforms are missing
+    // or another zoom animation is already running
     if (
       !model ||
       !original ||
@@ -321,6 +426,7 @@ const ZoomInButton = ({
 
     isZoomAnimating.current = true
 
+    // Create a timeline for zooming out
     zoomTimeline.current =
       gsap.timeline({
         onComplete: () => {
@@ -331,6 +437,7 @@ const ZoomInButton = ({
         },
       })
 
+    // Restore original position
     zoomTimeline.current.to(
       model.position,
       {
@@ -347,6 +454,7 @@ const ZoomInButton = ({
       0
     )
 
+    // Restore original rotation
     zoomTimeline.current.to(
       model.rotation,
       {
@@ -363,6 +471,7 @@ const ZoomInButton = ({
       0
     )
 
+    // Restore original scale
     zoomTimeline.current.to(
       model.scale,
       {
@@ -380,6 +489,10 @@ const ZoomInButton = ({
     )
   }
 
+  // ==========================================
+  // TOGGLE BETWEEN ZOOM IN AND ZOOM OUT
+  // ==========================================
+
   const handleZoom = () => {
     if (isZoomAnimating.current) {
       return
@@ -391,6 +504,10 @@ const ZoomInButton = ({
       zoomIn()
     }
   }
+
+  // ==========================================
+  // RENDER ZOOM BUTTON
+  // ==========================================
 
   return (
     <button
@@ -414,8 +531,10 @@ const ZoomInButton = ({
           width="24"
           xmlns="http://www.w3.org/2000/svg"
         >
+          {/* Magnifying glass icon */}
           <path d="M9.145 18.29c-5.042 0-9.145-4.102-9.145-9.145s4.103-9.145 9.145-9.145 9.145 4.103 9.145 9.145-4.102 9.145-9.145 9.145zm0-15.167c-3.321 0-6.022 2.702-6.022 6.022s2.702 6.022 6.022 6.022 6.023-2.702 6.023-6.022-2.702-6.022-6.023-6.022zm9.263 12.443c-.817 1.176-1.852 2.188-3.046 2.981l5.452 5.453 3.014-3.013-5.42-5.421z" />
 
+          {/* Plus icon while normal, minus icon while zoomed */}
           <path
             d={
               isZoomedIn

@@ -17,6 +17,11 @@ import {
 
 import "./SidePanel.css"
 
+// ==========================================
+// SIDEPANEL TEXT CONTENT
+// Each active book page has a heading and text.
+// ==========================================
+
 const sidePanelData = {
   headings: {
     1: "About Us",
@@ -83,33 +88,51 @@ const sidePanelData = {
   },
 }
 
+// ==========================================
+// RESPONSIVE SCREEN TYPE DETECTION
+// ==========================================
+
 const getScreenType = () => {
   const width =
     window.innerWidth
 
+  // Mobile: 483px and below
   if (width <= 483) {
     return "mobile"
   }
 
+  // Large mobile: 484px to 600px
   if (width <= 600) {
     return "largeMobile"
   }
 
+  // Small tablet: 601px to 784px
   if (width <= 784) {
     return "smallTablet"
   }
 
+  // Tablet: 785px to 1024px
   if (width <= 1024) {
     return "tablet"
   }
 
+  // Desktop: above 1024px
   return "desktop"
 }
 
+// ==========================================
+// SIDEPANEL COMPONENT
+// ==========================================
+
 const SidePanel = ({
+  // Buttons passed from App.jsx
   children,
 
+  // ==========================================
+  // DESKTOP MODEL TRANSFORMS
   // Above 1024px
+  // ==========================================
+
   modelPosition = [
     2.7,
     0,
@@ -124,7 +147,11 @@ const SidePanel = ({
 
   modelScale = 0.8,
 
+  // ==========================================
+  // TABLET MODEL TRANSFORMS
   // 785px to 1024px
+  // ==========================================
+
   tabletModelPosition = [
     1.5,
     0,
@@ -139,7 +166,11 @@ const SidePanel = ({
 
   tabletModelScale = 0.7,
 
+  // ==========================================
+  // SMALL TABLET MODEL TRANSFORMS
   // 601px to 784px
+  // ==========================================
+
   smallTabletModelPosition = [
     1.4,
     0.5,
@@ -154,7 +185,11 @@ const SidePanel = ({
 
   smallTabletModelScale = 0.55,
 
+  // ==========================================
+  // LARGE MOBILE MODEL TRANSFORMS
   // 484px to 600px
+  // ==========================================
+
   largeMobileModelPosition = [
     -1.7,
     1.7,
@@ -169,7 +204,11 @@ const SidePanel = ({
 
   largeMobileModelScale = 0.6,
 
+  // ==========================================
+  // MOBILE MODEL TRANSFORMS
   // 483px and below
+  // ==========================================
+
   mobileModelPosition = [
     -2,
     1.7,
@@ -184,25 +223,48 @@ const SidePanel = ({
 
   mobileModelScale = 0.55,
 
+  // ==========================================
+  // GSAP ANIMATION SETTINGS
+  // ==========================================
+
   animationDuration = 1.5,
   contentFadeInDuration = 0.8,
   contentFadeOutDuration = 0.4,
   contentSlideDistance = 40,
   contentDelay = 0.1,
 }) => {
+  // ==========================================
+  // DOM REFERENCES
+  // ==========================================
+
+  // Outer wrapper animated from the left
   const sidePanelRef = useRef(null)
 
+  // Text content animated when page changes
   const contentRef = useRef(null)
 
+  // Saves initial 3D book transform for restoration
   const originalTransforms = useRef(null)
+
+  // ==========================================
+  // 3D BOOK REFERENCE
+  // ==========================================
 
   const {
     modelRef,
   } = useModelContext()
 
+  // ==========================================
+  // CURRENT BOOK PAGE
+  // ==========================================
+
   const {
     activePage,
   } = useAnimationContext()
+
+  // ==========================================
+  // CURRENT SCREEN TYPE
+  // ==========================================
 
   const [
     screenType,
@@ -215,10 +277,19 @@ const SidePanel = ({
     return getScreenType()
   })
 
+  // ==========================================
+  // DISPLAYED PAGE
+  // Changes after current content fades out
+  // ==========================================
+
   const [
     displayedPage,
     setDisplayedPage,
   ] = useState(activePage)
+
+  // ==========================================
+  // GET CURRENT PAGE CONTENT
+  // ==========================================
 
   const heading =
     sidePanelData.headings[
@@ -229,6 +300,10 @@ const SidePanel = ({
     sidePanelData.paragraphs[
       displayedPage
     ] || []
+
+  // ==========================================
+  // SCREEN TYPE HELPERS
+  // ==========================================
 
   const isMobile =
     screenType === "mobile"
@@ -241,6 +316,10 @@ const SidePanel = ({
 
   const isTablet =
     screenType === "tablet"
+
+  // ==========================================
+  // UPDATE SCREEN TYPE ON WINDOW RESIZE
+  // ==========================================
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -264,6 +343,10 @@ const SidePanel = ({
     }
   }, [])
 
+  // ==========================================
+  // SELECT RESPONSIVE BOOK POSITION
+  // ==========================================
+
   const finalModelPosition =
     isMobile
       ? mobileModelPosition
@@ -274,6 +357,10 @@ const SidePanel = ({
           : isTablet
             ? tabletModelPosition
             : modelPosition
+
+  // ==========================================
+  // SELECT RESPONSIVE BOOK ROTATION
+  // ==========================================
 
   const finalModelRotation =
     isMobile
@@ -286,6 +373,10 @@ const SidePanel = ({
             ? tabletModelRotation
             : modelRotation
 
+  // ==========================================
+  // SELECT RESPONSIVE BOOK SCALE
+  // ==========================================
+
   const finalModelScale =
     isMobile
       ? mobileModelScale
@@ -296,6 +387,10 @@ const SidePanel = ({
           : isTablet
             ? tabletModelScale
             : modelScale
+
+  // ==========================================
+  // OPEN SIDEPANEL AND MOVE BOOK
+  // ==========================================
 
   useEffect(() => {
     const model =
@@ -308,6 +403,7 @@ const SidePanel = ({
       return
     }
 
+    // Store initial book transform once
     if (
       model &&
       !originalTransforms.current
@@ -326,6 +422,7 @@ const SidePanel = ({
 
     const timeline = gsap.timeline()
 
+    // Slide side panel from left to its final position
     timeline.fromTo(
       panelWrapper,
       {
@@ -343,7 +440,9 @@ const SidePanel = ({
       0
     )
 
+    // Move book only when model is available
     if (model) {
+      // Animate book position
       timeline.to(
         model.position,
         {
@@ -360,6 +459,7 @@ const SidePanel = ({
         0
       )
 
+      // Animate book rotation
       timeline.to(
         model.rotation,
         {
@@ -376,6 +476,7 @@ const SidePanel = ({
         0
       )
 
+      // Animate uniform book scale
       timeline.to(
         model.scale,
         {
@@ -412,6 +513,10 @@ const SidePanel = ({
     animationDuration,
   ])
 
+  // ==========================================
+  // RESTORE BOOK TRANSFORM WHEN PANEL CLOSES
+  // ==========================================
+
   useEffect(() => {
     return () => {
       const model =
@@ -424,6 +529,7 @@ const SidePanel = ({
         return
       }
 
+      // Return book to original position
       gsap.to(
         model.position,
         {
@@ -439,6 +545,7 @@ const SidePanel = ({
         }
       )
 
+      // Return book to original rotation
       gsap.to(
         model.rotation,
         {
@@ -454,6 +561,7 @@ const SidePanel = ({
         }
       )
 
+      // Return book to original scale
       gsap.to(
         model.scale,
         {
@@ -474,6 +582,10 @@ const SidePanel = ({
     animationDuration,
   ])
 
+  // ==========================================
+  // FADE OUT OLD CONTENT WHEN PAGE CHANGES
+  // ==========================================
+
   useEffect(() => {
     const content =
       contentRef.current
@@ -482,6 +594,7 @@ const SidePanel = ({
       return
     }
 
+    // Do nothing if content already matches page
     if (activePage === displayedPage) {
       return
     }
@@ -498,6 +611,7 @@ const SidePanel = ({
 
         overwrite: true,
 
+        // Change text after fade-out completes
         onComplete: () => {
           setDisplayedPage(activePage)
         },
@@ -513,6 +627,10 @@ const SidePanel = ({
     contentFadeOutDuration,
     contentSlideDistance,
   ])
+
+  // ==========================================
+  // FADE IN NEW CONTENT AFTER PAGE CHANGES
+  // ==========================================
 
   useLayoutEffect(() => {
     const content =
@@ -553,6 +671,10 @@ const SidePanel = ({
     contentDelay,
   ])
 
+  // ==========================================
+  // RENDER SIDEPANEL
+  // ==========================================
+
   return (
     <div
       ref={sidePanelRef}
@@ -584,6 +706,7 @@ const SidePanel = ({
         </div>
       </div>
 
+      {/* Navigation and Home button children */}
       {children}
     </div>
   )

@@ -1,4 +1,3 @@
-
 import {
   ContactShadows,
   Environment,
@@ -6,54 +5,43 @@ import {
 } from "@react-three/drei";
 
 import { Canvas } from "@react-three/fiber";
-import { useContext, useRef } from "react";
+import { Suspense, useContext, useRef } from "react";
 import * as THREE from "three";
 
 import Model from "./Model/Model";
 import "./Experience.css";
 import { useAnimationContext } from "../Contexts/AnimationContext";
-
-// =====================================
-// DIRECTIONAL LIGHT
-// =====================================
-const MainLight = () => {
-  const lightRef = useRef();
-
-  return (
-    <directionalLight
-      ref={lightRef}
-      position={[-242.7, -197.6, 42.4]}
-      intensity={5}
-      color="#ffffff"
-      castShadow
-      shadow-mapSize={[2048, 2048]}
-      shadow-camera-left={-15}
-      shadow-camera-right={15}
-      shadow-camera-top={15}
-      shadow-camera-bottom={-15}
-      shadow-bias={-0.0001}
-    >
-      <object3D
-        attach="target"
-        position={[1.5, 0.6, -4.0]}
-      />
-    </directionalLight>
-  );
-};
+import Loading from "../Loading/Loading";
 
 // =====================================
 // EXPERIENCE
 // =====================================
 
 const Experience = () => {
-const backgroundImage =
-  `${import.meta.env.BASE_URL}bg02.png`
+  // =====================================
+  // BACKGROUND IMAGE
+  // Uses BASE_URL so it works after deployment
+  // =====================================
+
+  const backgroundImage =
+    `${import.meta.env.BASE_URL}bg02.webp`
+
+  // =====================================
+  // MODEL REFERENCE
+  // Used for controlling book transforms
+  // =====================================
+
   const modelRef = useRef(null);
+
+  // =====================================
+  // ANIMATION CONTEXT
+  // Used to hide floor shadow during zoom
+  // =====================================
 
   const {isZoomedIn} = useAnimationContext()
 
   // =====================================
-  // ENVIRONMENT VALUES
+  // ENVIRONMENT LIGHTING VALUES
   // =====================================
 
   const environmentRotation = [0.00, 2.30, 0.34];
@@ -61,46 +49,96 @@ const backgroundImage =
 
   return (
     <div 
+      // =====================================
+      // BACKGROUND IMAGE STYLE
+      // =====================================
+
       style={{
         backgroundImage:
           `url(${backgroundImage})`,
       }}
-    className="experience-container">
+
+      // =====================================
+      // MAIN THREE.JS EXPERIENCE CONTAINER
+      // =====================================
+
+      className="experience-container"
+    >
       
+      {/* =====================================
+          R3F CANVAS
+      ===================================== */}
+
       <Canvas
+        // =====================================
+        // CAMERA SETTINGS
+        // =====================================
+
         camera={{
           position: [5, 4, 7],
           fov: 45,
           near: 0.1,
           far: 1000,
         }}
+
+        // =====================================
+        // ENABLE SHADOWS
+        // =====================================
+
         shadows
+
+        // =====================================
+        // PIXEL RATIO
+        // Uses 1 on lower quality screens
+        // Uses maximum 2 on high DPI screens
+        // =====================================
+
         dpr={[1, 2]}
+
+        // =====================================
+        // WEBGL RENDERER SETTINGS
+        // =====================================
+
         gl={{
           antialias: true,
           alpha: true,
-          outputColorSpace: THREE.SRGBColorSpace,
-          toneMapping: THREE.ACESFilmicToneMapping,
+
+          outputColorSpace:
+            THREE.SRGBColorSpace,
+
+          toneMapping:
+            THREE.ACESFilmicToneMapping,
+
           toneMappingExposure: 1,
         }}
       >
-        {/* ENVIRONMENT LIGHTING */}
+        {/* =====================================
+            HDRI ENVIRONMENT LIGHTING
+        ===================================== */}
+
         <Environment
           preset="studio"
           environmentIntensity={environmentIntensity}
           environmentRotation={environmentRotation}
         />
 
-        {/* GENERAL LIGHTING */}
+        {/* =====================================
+            GENERAL AMBIENT LIGHT
+        ===================================== */}
+
         <ambientLight intensity={0.3} />
 
-        {/* DIRECTIONAL LIGHT */}
-        {/* <MainLight /> */}
+        {/* =====================================
+            BOOK MODEL
+        ===================================== */}
 
-        {/* MODEL */}
         <Model modelRef={modelRef} />
 
-        {/* SOFT SHADOW */}
+        {/* =====================================
+            SOFT FLOOR SHADOW
+            Hidden when user zooms into book
+        ===================================== */}
+
         {!isZoomedIn && <ContactShadows
             position={[0, -2, 0]}
             opacity={0.7}
@@ -111,13 +149,6 @@ const backgroundImage =
             color="#030303"
         />}
 
-        {/* CAMERA CONTROLS */}
-        {/* <OrbitControls
-          enableDamping
-          dampingFactor={0.05}
-          minDistance={2}
-          maxDistance={30}
-        /> */}
       </Canvas>
     </div>
   );

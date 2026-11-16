@@ -13,6 +13,10 @@ import {
   useAnimationContext,
 } from "../Contexts/AnimationContext"
 
+// ==========================================
+// SCREEN TYPE DETECTION
+// ==========================================
+
 const getScreenType = () => {
   const width =
     window.innerWidth
@@ -47,6 +51,10 @@ const getScreenType = () => {
 
   return "desktop"
 }
+
+// ==========================================
+// NEXT AND PREVIOUS PAGE BUTTONS
+// ==========================================
 
 const HoverMeButton = ({
   // ==========================================
@@ -151,6 +159,10 @@ const HoverMeButton = ({
   nextMoveDuration,
   previousMoveDuration,
 }) => {
+  // ==========================================
+  // SHARED ANIMATION AND PAGE STATE
+  // ==========================================
+
   const {
     activePage,
     setActivePage,
@@ -171,6 +183,10 @@ const HoverMeButton = ({
     playPaperAnimation,
   } = useAnimationContext()
 
+  // ==========================================
+  // CURRENT SCREEN TYPE
+  // ==========================================
+
   const [
     screenType,
     setScreenType,
@@ -182,9 +198,18 @@ const HoverMeButton = ({
     return getScreenType()
   })
 
+  // ==========================================
+  // BUTTON DOM REFERENCES
+  // Used by GSAP position animations
+  // ==========================================
+
   const nextButtonRef = useRef(null)
 
   const previousButtonRef = useRef(null)
+
+  // ==========================================
+  // SCREEN TYPE HELPERS
+  // ==========================================
 
   const isMobileLandscape =
     screenType === "mobileLandscape"
@@ -197,6 +222,10 @@ const HoverMeButton = ({
 
   const isTablet =
     screenType === "tablet"
+
+  // ==========================================
+  // UPDATE SCREEN TYPE ON RESIZE OR ROTATION
+  // ==========================================
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -230,6 +259,10 @@ const HoverMeButton = ({
     }
   }, [])
 
+  // ==========================================
+  // SELECT NORMAL NEXT BUTTON POSITION
+  // ==========================================
+
   const normalNextLeft =
     isLargeMobile
         ? largeMobileNextLeft
@@ -247,6 +280,10 @@ const HoverMeButton = ({
           : isTablet
             ? tabletNextTop
             : originalNextTop
+
+  // ==========================================
+  // SELECT NORMAL PREVIOUS BUTTON POSITION
+  // ==========================================
 
   const normalPreviousLeft =
     isLargeMobile
@@ -266,6 +303,12 @@ const HoverMeButton = ({
             ? tabletPreviousTop
             : originalPreviousTop
 
+  // ==========================================
+  // MOVE BUTTONS WITH GSAP
+  // Side panel has highest priority.
+  // Zoom positions override normal positions.
+  // ==========================================
+
   useLayoutEffect(() => {
     const nextButton =
       nextButtonRef.current
@@ -277,6 +320,7 @@ const HoverMeButton = ({
       return
     }
 
+    // Start with normal responsive positions
     let nextTargetLeft =
       normalNextLeft
 
@@ -289,6 +333,7 @@ const HoverMeButton = ({
     let previousTargetTop =
       normalPreviousTop
 
+    // Use zoomed positions while book is zoomed
     if (isZoomedIn) {
       nextTargetLeft =
          isLargeMobile
@@ -327,6 +372,7 @@ const HoverMeButton = ({
                 : zoomPreviousTop
     }
 
+    // Side panel positions override every other position
     if (isSidePanel) {
       nextTargetLeft = nextLeft
 
@@ -339,6 +385,7 @@ const HoverMeButton = ({
         previousTop
     }
 
+    // Animate next button to selected target position
     const nextAnimation = gsap.to(
       nextButton,
       {
@@ -355,6 +402,7 @@ const HoverMeButton = ({
       }
     )
 
+    // Animate previous button to selected target position
     const previousAnimation = gsap.to(
       previousButton,
       {
@@ -426,7 +474,12 @@ const HoverMeButton = ({
     previousMoveDuration,
   ])
 
+  // ==========================================
+  // GO TO NEXT PAGE
+  // ==========================================
+
   const nextPage = () => {
+    // Play the correct page-turn animation
     if (activePage === 1) {
       playPaperAnimation(
         paper01AnimationRef,
@@ -449,12 +502,18 @@ const HoverMeButton = ({
       )
     }
 
+    // Maximum page is page 5
     if (activePage <= 4) {
       setActivePage(activePage + 1)
     }
   }
 
+  // ==========================================
+  // GO TO PREVIOUS PAGE
+  // ==========================================
+
   const previousPage = () => {
+    // Reverse the correct page-turn animation
     if (activePage === 2) {
       playPaperAnimation(
         paper01AnimationRef,
@@ -481,10 +540,15 @@ const HoverMeButton = ({
       )
     }
 
+    // Minimum page is page 1
     if (activePage > 1) {
       setActivePage(activePage - 1)
     }
   }
+
+  // ==========================================
+  // RENDER NEXT AND PREVIOUS BUTTONS
+  // ==========================================
 
   return (
     <>

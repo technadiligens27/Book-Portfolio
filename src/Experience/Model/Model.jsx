@@ -24,13 +24,22 @@ import {
   useModelContext,
 } from "../../Contexts/ModelContext"
 
+// ==========================================
+// PAPER TEXTURE FILES
+// ==========================================
+
 const paperTexturePaths = [
-  "./TechnaDiligencs-Logo.jpg",
-  "./post05.jpg",
-  "./post06.png",
-  "./post07.png",
-  "./post08.png",
+  "./post01.jpg",
+  "./post02.webp",
+  "./post03.webp",
+  "./post04.webp",
+  "./post05.png",
 ]
+
+// ==========================================
+// BLENDER PAPER MESH NAMES
+// Must match the names in Book.glb
+// ==========================================
 
 const paperMeshNames = [
   "paper01",
@@ -40,36 +49,57 @@ const paperMeshNames = [
   "paper05",
 ]
 
+// ==========================================
+// RESPONSIVE SCREEN TYPE
+// ==========================================
+
 const getScreenType = () => {
   const width =
     window.innerWidth
 
+  // Mobile: 483px and below
   if (width <= 483) {
     return "mobile"
   }
 
+  // Large mobile: 484px to 600px
   if (width <= 600) {
     return "largeMobile"
   }
 
+  // Small tablet: 601px to 784px
   if (width <= 784) {
     return "smallTablet"
   }
 
+  // Tablet: 785px to 1024px
   if (width <= 1024) {
     return "tablet"
   }
 
+  // Desktop: above 1024px
   return "desktop"
 }
 
+// ==========================================
+// MODEL COMPONENT
+// ==========================================
+
 const Model = ({
+  // ==========================================
+  // FLOAT ANIMATION SETTINGS
+  // ==========================================
+
   floatSpeed = 7,
   floatIntensity = 1,
   rotationIntensity = 0.1,
   floatingRange = [-0.1, 0.1],
 
+  // ==========================================
+  // DESKTOP TRANSFORMS
   // Above 1024px
+  // ==========================================
+
   desktopPosition = [
     -0.39,
     0,
@@ -84,7 +114,11 @@ const Model = ({
 
   desktopScale = 0.7,
 
+  // ==========================================
+  // TABLET TRANSFORMS
   // 785px to 1024px
+  // ==========================================
+
   tabletPosition = [
     -0.39,
     0,
@@ -99,7 +133,11 @@ const Model = ({
 
   tabletScale = 0.6,
 
+  // ==========================================
+  // SMALL TABLET TRANSFORMS
   // 601px to 784px
+  // ==========================================
+
   smallTabletPosition = [
     -0.39,
     0,
@@ -114,7 +152,11 @@ const Model = ({
 
   smallTabletScale = 0.6,
 
+  // ==========================================
+  // LARGE MOBILE TRANSFORMS
   // 484px to 600px
+  // ==========================================
+
   largeMobilePosition = [
     -0.39,
     0,
@@ -129,7 +171,11 @@ const Model = ({
 
   largeMobileScale = 0.6,
 
+  // ==========================================
+  // MOBILE TRANSFORMS
   // 483px and below
+  // ==========================================
+
   mobilePosition = [
     -0.39,
     0,
@@ -144,13 +190,28 @@ const Model = ({
 
   mobileScale = 0.45,
 }) => {
+  // ==========================================
+  // MODEL REFERENCE FROM CONTEXT
+  // Used by SidePanel and ZoomInButton
+  // ==========================================
+
   const {
     modelRef,
   } = useModelContext()
 
+  // ==========================================
+  // WEBGL RENDERER
+  // Used for texture quality settings
+  // ==========================================
+
   const {
     gl,
   } = useThree()
+
+  // ==========================================
+  // ANIMATION REFERENCES FROM CONTEXT
+  // Used by next/previous page buttons
+  // ==========================================
 
   const {
     paper01AnimationRef,
@@ -164,6 +225,10 @@ const Model = ({
     paper04ShapeRef,
   } = useAnimationContext()
 
+  // ==========================================
+  // CURRENT SCREEN TYPE
+  // ==========================================
+
   const [
     screenType,
     setScreenType,
@@ -174,6 +239,10 @@ const Model = ({
 
     return getScreenType()
   })
+
+  // ==========================================
+  // UPDATE SCREEN TYPE ON WINDOW RESIZE
+  // ==========================================
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -197,6 +266,10 @@ const Model = ({
     }
   }, [])
 
+  // ==========================================
+  // LOAD BOOK MODEL
+  // ==========================================
+
   const modelPath =
     `${import.meta.env.BASE_URL}Book.glb`
 
@@ -205,6 +278,10 @@ const Model = ({
     animations,
   } = useGLTF(modelPath)
 
+  // ==========================================
+  // CREATE THREE.JS ANIMATION ACTIONS
+  // ==========================================
+
   const {
     actions,
   } = useAnimations(
@@ -212,28 +289,41 @@ const Model = ({
     scene
   )
 
+  // ==========================================
+  // LOAD PAGE TEXTURES
+  // ==========================================
+
   const paperTextures = useTexture(
     paperTexturePaths
   )
+
+  // ==========================================
+  // CONFIGURE TEXTURE QUALITY
+  // ==========================================
 
   useEffect(() => {
     const maxAnisotropy =
       gl.capabilities.getMaxAnisotropy()
 
     paperTextures.forEach((texture) => {
+      // GLB textures normally need flipY disabled
       texture.flipY = false
 
+      // Correct image colours
       texture.colorSpace =
         THREE.SRGBColorSpace
 
+      // Improve texture filtering
       texture.magFilter =
         THREE.LinearFilter
 
       texture.minFilter =
         THREE.LinearMipmapLinearFilter
 
+      // Improve distant texture quality
       texture.generateMipmaps = true
 
+      // Improve texture quality at angles
       texture.anisotropy =
         maxAnisotropy
 
@@ -244,6 +334,10 @@ const Model = ({
     gl,
   ])
 
+  // ==========================================
+  // APPLY TEXTURES TO BLENDER PAPER MESHES
+  // ==========================================
+
   useEffect(() => {
     const originalMaterials = []
 
@@ -251,6 +345,7 @@ const Model = ({
 
     const textureMap = {}
 
+    // Match each paper mesh to its image texture
     paperMeshNames.forEach(
       (name, index) => {
         textureMap[name] =
@@ -258,6 +353,7 @@ const Model = ({
       }
     )
 
+    // Search every object inside Book.glb
     scene.traverse((child) => {
       if (!child.isMesh) {
         return
@@ -269,15 +365,18 @@ const Model = ({
       const texture =
         textureMap[meshName]
 
+      // Skip meshes that are not book pages
       if (!texture) {
         return
       }
 
+      // Save Blender material for cleanup
       originalMaterials.push({
         mesh: child,
         material: child.material,
       })
 
+      // Create a new material with the page image
       const applyTexture = (
         material
       ) => {
@@ -308,6 +407,7 @@ const Model = ({
         return newMaterial
       }
 
+      // Supports meshes that have one or many materials
       if (
         Array.isArray(
           child.material
@@ -325,6 +425,7 @@ const Model = ({
       }
     })
 
+    // Restore original materials on component unmount
     return () => {
       originalMaterials.forEach(
         ({
@@ -346,7 +447,12 @@ const Model = ({
     paperTextures,
   ])
 
+  // ==========================================
+  // STORE PAGE ANIMATIONS IN CONTEXT REFS
+  // ==========================================
+
   useEffect(() => {
+    // Page turn animations
     paper01AnimationRef.current =
       actions["paper01-animation"]
 
@@ -359,6 +465,7 @@ const Model = ({
     paper04AnimationRef.current =
       actions["paper04-animation"]
 
+    // Shape key page animations
     paper01ShapeRef.current =
       actions["PlaneAction.004"]
 
@@ -383,6 +490,7 @@ const Model = ({
       paper04ShapeRef,
     ]
 
+    // Configure every animation to play once
     animationRefs.forEach(
       (animationRef) => {
         const action =
@@ -413,6 +521,10 @@ const Model = ({
     paper04ShapeRef,
   ])
 
+  // ==========================================
+  // SELECT POSITION FOR CURRENT SCREEN SIZE
+  // ==========================================
+
   const responsivePosition =
     screenType === "mobile"
       ? mobilePosition
@@ -423,6 +535,10 @@ const Model = ({
           : screenType === "tablet"
             ? tabletPosition
             : desktopPosition
+
+  // ==========================================
+  // SELECT ROTATION FOR CURRENT SCREEN SIZE
+  // ==========================================
 
   const responsiveRotation =
     screenType === "mobile"
@@ -435,6 +551,10 @@ const Model = ({
             ? tabletRotation
             : desktopRotation
 
+  // ==========================================
+  // SELECT SCALE FOR CURRENT SCREEN SIZE
+  // ==========================================
+
   const responsiveScale =
     screenType === "mobile"
       ? mobileScale
@@ -445,6 +565,10 @@ const Model = ({
           : screenType === "tablet"
             ? tabletScale
             : desktopScale
+
+  // ==========================================
+  // RENDER BOOK MODEL
+  // ==========================================
 
   return (
     <Float
@@ -467,12 +591,18 @@ const Model = ({
   )
 }
 
-useGLTF.preload(
-  `${import.meta.env.BASE_URL}Book.glb`
-)
+// ==========================================
+// OPTIONAL PRELOADING
+// Keep commented if you want the loader
+// to remain visible on first load.
+// ==========================================
 
-useTexture.preload(
-  paperTexturePaths
-)
+// useGLTF.preload(
+//   `${import.meta.env.BASE_URL}Book.glb`
+// )
+
+// useTexture.preload(
+//   paperTexturePaths
+// )
 
 export default Model
